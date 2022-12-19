@@ -125,7 +125,7 @@ int main () {
         t = S.getnext();
     }*/
 
-    cout << endl;
+    cout << numstack.pop().val << endl;
     // End pretty printer coding demo.
 
     return 0;

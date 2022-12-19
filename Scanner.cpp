@@ -39,14 +39,14 @@ Token Scanner::getnext() {
 
 
     // collapse whitespace
-    while (isspace(buf[0]) || (buf[0] == 13) || (buf[0] == '\n')) {
+    while ((buf[0] == ' ') || (buf[0] == 13)) {
         buf[0] = str->get(); 
-        if (str->eof()) break;
+        if (str->eof() || (buf[0] == '\n')) break;
     }
 
 
     // case 1: eof    
-    if (str->eof()) { ret.tt = eof; ret.text = ""; return ret; }
+    if (str->eof() || (buf[0] == '\n')) { ret.tt = eof; ret.text = ""; return ret; }
 
 
     // case 2: numerical-   [0-9]+
@@ -58,7 +58,7 @@ Token Scanner::getnext() {
             buf[0] = str->get();
         }
         ret.val = stod(ret.text, NULL);
-        if (isspace(buf[0]) || (buf[0] == 13) || (buf[0] == '\n')) buf[0] = 0;
+        if ((buf[0] == ' ') || (buf[0] == 13)) buf[0] = 0;
         return ret;
     }
 
