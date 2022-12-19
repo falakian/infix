@@ -41,12 +41,12 @@ Token Scanner::getnext() {
     // collapse whitespace
     while ((buf[0] == ' ') || (buf[0] == 13)) {
         buf[0] = str->get(); 
-        if (str->eof() || (buf[0] == '\n')) break;
+        if (str->eof() || (buf[0] == '\n')) break; // When it reaches a new line, exit the loop
     }
 
 
     // case 1: eof    
-    if (str->eof() || (buf[0] == '\n')) { ret.tt = eof; ret.text = ""; return ret; }
+    if (str->eof() || (buf[0] == '\n')) { ret.tt = eof; ret.text = ""; return ret; } //Return eof when a newline is reached
 
 
     // case 2: numerical-   [0-9]+

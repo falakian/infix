@@ -14,30 +14,32 @@ int main () {
     Stack<Token> numstack, opstack;  // 2x Stacks of type Token
     
 
-    t = S.getnext();
+    t = S.getnext(); // Read the first character
 
-    while (t.tt != eof || !opstack.isEmpty())
+    while (t.tt != eof || !opstack.isEmpty()) // The loop continues until the end or until the operator stack is empty
+        // After reaching the end of the line, it pops all the operators in the stack so that the loop is no longer executed
     {
-        if (t.tt == integer) 
+        if (t.tt == integer) //If the character was a number
         { 
-            numstack.push(t);
-            t = S.getnext();
+            numstack.push(t);  // Add to stack of numbers
+            t = S.getnext();   // Read the next character
         }
         else 
         { 
-            if (t.tt == lptok) 
+            if (t.tt == lptok) // If the parentheses were open, add them to the operator stack
             { 
                 opstack.push(t);
-                t = S.getnext();
+                t = S.getnext(); // Read the next character
             }
             else 
             {
-                if (t.tt == rptok) 
+                if (t.tt == rptok) // If we reach the closed parenthesis
+                                   // we pop from the stack until we reach the open parenthesis
                 {
                     if (opstack.peek().tt == lptok) 
                     {
                         opstack.pop();
-                        t = S.getnext();
+                        t = S.getnext(); // Read the next character
                     }
                     else 
                     {
@@ -58,10 +60,13 @@ int main () {
                 }
                 else 
                 {
-                    if (t.tt == pltok || t.tt == mitok || t.tt == eof) 
+                    if (t.tt == pltok || t.tt == mitok || t.tt == eof)  //If subtraction or addition or we reach the end of the line
                     {
                         if (!opstack.isEmpty() && (opstack.peek().tt == pltok || opstack.peek().tt == mitok || opstack.peek().tt == asttok || opstack.peek().tt == slashtok)) 
                         {
+                            /*Because the priority of addition and subtraction is lower than multiplication
+                            and division and equal to themselves, if the operator stack is not empty,
+                            we will pop it until it is empty or reach the open parenthesis.*/
                             int a2 = numstack.pop().val;
                             int a1 = numstack.pop().val;
                             int result = 0;
@@ -79,15 +84,18 @@ int main () {
                         else 
                         {
                             opstack.push(t);
-                            t = S.getnext();
+                            t = S.getnext(); // Read the next character
                         }
                     }
                     else 
                     {
-                        if (t.tt == asttok || t.tt == slashtok) 
+                        if (t.tt == asttok || t.tt == slashtok)  // If the operator was multiplication or division
                         {
                             if (!opstack.isEmpty() && (opstack.peek().tt == asttok || opstack.peek().tt == slashtok)) 
                             {
+                                /*If the multiplication or division operator is in the stack, 
+                                we will pop it until we reach the operator 
+                                whose priority is higher than that of multiplication and division.*/
                                 int a2 = numstack.pop().val;
                                 int a1 = numstack.pop().val;
                                 int result = 0;
@@ -105,7 +113,7 @@ int main () {
                             else 
                             {
                                 opstack.push(t);
-                                t = S.getnext();
+                                t = S.getnext(); // Read the next character
                             }
                         }
                     }
@@ -113,18 +121,8 @@ int main () {
             }
         }
     }
-    // Pretty printer coding demo.  Please remove before coding
-    /*while (t.tt != eof) {
-        if (t.tt == integer || t.tt == lptok || t.tt == rptok) {
-            cout << t;
-        } else if (t.tt == pltok || t.tt == mitok || 
-                   t.tt == asttok || t.tt == slashtok) {
-            cout << ' ' << t << ' ';
-        }
-
-        t = S.getnext();
-    }*/
-
+    // After the loop is finished, we pop from the stack of numbers 
+    //to get the final answer and then print it
     cout << numstack.pop().val << endl;
     // End pretty printer coding demo.
 
